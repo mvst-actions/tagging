@@ -1,0 +1,17 @@
+name: 'Set version tag'
+description: 'Sets the version tag for the build'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.x'
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0
+    - name: Create tag
+      run: |
+        git tag -a v${{ env.GitVersion_MajorMinorPatch }} -m "Version ${{ env.GitVersion_MajorMinorPatch }}"
+        git push origin v${{ env.GitVersion_MajorMinorPatch }}
+      shell: bash
